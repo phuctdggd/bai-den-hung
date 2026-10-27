@@ -1,102 +1,125 @@
-
+```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tour 360° Đền Hùng</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <title>Tour tham quan 360° Đền Hùng</title>
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: #000;
-    }
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .tour {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      height: 100dvh;
-      border: none;
-      display: block;
-      background: #000;
-    }
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            font-family: Arial, sans-serif;
+        }
 
-    #musicButton {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      z-index: 9999;
-      padding: 12px 18px;
-      border: 1px solid rgba(255,255,255,0.4);
-      border-radius: 30px;
-      background: rgba(20,20,20,0.75);
-      color: white;
-      font-size: 14px;
-      cursor: pointer;
-      backdrop-filter: blur(8px);
-    }
+        /* Tour 360 độ toàn màn hình */
+        .tour {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
+            border: none;
+            display: block;
+            background: #000;
+        }
 
-    #musicButton:hover {
-      background: rgba(90,65,30,0.9);
-    }
-  </style>
+        /* Nút bật/tắt nhạc nền */
+        #musicButton {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 9999;
+
+            padding: 12px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 30px;
+
+            background: rgba(20, 20, 20, 0.8);
+            color: white;
+
+            font-size: 14px;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+
+            transition: background 0.3s;
+        }
+
+        #musicButton:hover {
+            background: rgba(120, 85, 35, 0.95);
+        }
+
+        #musicButton:focus-visible {
+            outline: 2px solid white;
+            outline-offset: 3px;
+        }
+    </style>
 </head>
 
 <body>
 
-  <!-- Tour 360 độ -->
-  <iframe
-    class="tour"
-    src="./tour/index.htm"
-    title="Tour tham quan 360 độ Đền Hùng"
-    allow="fullscreen; accelerometer; gyroscope; vr; xr"
-    allowfullscreen>
-  </iframe>
+    <!-- Hiển thị tour 360 độ Đền Hùng -->
+    <iframe
+        class="tour"
+        src="./tour/index.htm"
+        title="Tour tham quan 360 độ Khu di tích lịch sử Đền Hùng"
+        allow="fullscreen; accelerometer; gyroscope; vr; xr"
+        allowfullscreen>
+    </iframe>
 
-  <!-- Nhạc nền -->
-  <audio id="backgroundMusic" loop preload="auto">
-    <source src="./music/nhac-nen.mp3" type="audio/mpeg">
-  </audio>
+    <!-- Nhạc nền: file nhạc đặt trong thư mục music -->
+    <audio id="backgroundMusic" loop preload="auto">
+        <source src="./music/nhac-nen.mp3" type="audio/mpeg">
+        Trình duyệt của bạn không hỗ trợ phát nhạc.
+    </audio>
 
-  <!-- Nút điều khiển nhạc -->
-  <button id="musicButton" type="button">
-    ♫ Bật nhạc nền
-  </button>
+    <!-- Nút điều khiển nhạc -->
+    <button id="musicButton" type="button" aria-pressed="false">
+        ♫ Bật nhạc nền
+    </button>
 
-  <script>
-    const music = document.getElementById("backgroundMusic");
-    const button = document.getElementById("musicButton");
+    <script>
+        const music = document.getElementById("backgroundMusic");
+        const button = document.getElementById("musicButton");
 
-    music.volume = 0.25;
+        // Âm lượng nhạc nền: 25%
+        music.volume = 0.25;
 
-    button.addEventListener("click", async () => {
-      if (music.paused) {
-        try {
-          await music.play();
-          button.textContent = "♫ Tắt nhạc nền";
-        } catch (error) {
-          button.textContent = "Không phát được nhạc";
-        }
-      } else {
-        music.pause();
-        button.textContent = "♫ Bật nhạc nền";
-      }
-    });
+        // Bật hoặc tắt nhạc khi người dùng nhấn nút
+        button.addEventListener("click", async function () {
+            if (music.paused) {
+                try {
+                    await music.play();
 
-    music.addEventListener("ended", () => {
-      button.textContent = "♫ Bật nhạc nền";
-    });
-  </script>
+                    button.textContent = "♫ Tắt nhạc nền";
+                    button.setAttribute("aria-pressed", "true");
+                } catch (error) {
+                    button.textContent = "Không phát được nhạc - kiểm tra file";
+                    button.setAttribute("aria-pressed", "false");
+                    console.error("Lỗi phát nhạc:", error);
+                }
+            } else {
+                music.pause();
+
+                button.textContent = "♫ Bật nhạc nền";
+                button.setAttribute("aria-pressed", "false");
+            }
+        });
+    </script>
 
 </body>
 </html>
+```
