@@ -3,78 +3,100 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tour tham quan Đền Hùng</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tour 360° Đền Hùng</title>
+
   <style>
-    * { box-sizing: border-box; }
-
-    body {
+    * {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f1e8;
-      color: #29251f;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    header {
-      background: #762b20;
-      color: white;
-      text-align: center;
-      padding: 30px 16px;
-    }
-
-    main {
-      max-width: 1100px;
-      margin: 30px auto;
-      padding: 0 16px;
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
     }
 
     .tour {
+      position: fixed;
+      inset: 0;
       width: 100%;
-      height: 70vh;
-      min-height: 420px;
-      border: 0;
-      border-radius: 12px;
-      background: #ddd;
+      height: 100%;
+      height: 100dvh;
+      border: none;
+      display: block;
+      background: #000;
     }
 
-    .note {
-      line-height: 1.7;
-      text-align: center;
-    }
-
-    footer {
-      padding: 20px;
-      text-align: center;
-      background: #762b20;
+    #musicButton {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 9999;
+      padding: 12px 18px;
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 30px;
+      background: rgba(20,20,20,0.75);
       color: white;
+      font-size: 14px;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+    }
+
+    #musicButton:hover {
+      background: rgba(90,65,30,0.9);
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <h1>KHÁM PHÁ ĐỀN HÙNG</h1>
-    <p>Tour tham quan ảo 360°</p>
-  </header>
 
-  <main>
-    <h2>Trải nghiệm không gian di tích</h2>
+  <!-- Tour 360 độ -->
+  <iframe
+    class="tour"
+    src="./tour/index.htm"
+    title="Tour tham quan 360 độ Đền Hùng"
+    allow="fullscreen; accelerometer; gyroscope; vr; xr"
+    allowfullscreen>
+  </iframe>
 
-    <iframe
-      class="tour"
-      src="./tour/index.htm"
-      title="Tour 360 độ Đền Hùng"
-      allow="fullscreen; accelerometer; gyroscope; vr; xr"
-      allowfullscreen>
-    </iframe>
+  <!-- Nhạc nền -->
+  <audio id="backgroundMusic" loop preload="auto">
+    <source src="./music/nhac-nen.mp3" type="audio/mpeg">
+  </audio>
 
-    <p class="note">
-      Khám phá các địa điểm tiêu biểu trong Khu di tích
-      lịch sử Đền Hùng thông qua tour tham quan ảo.
-    </p>
-  </main>
+  <!-- Nút điều khiển nhạc -->
+  <button id="musicButton" type="button">
+    ♫ Bật nhạc nền
+  </button>
 
-  <footer>
-    Tour tham quan ảo Đền Hùng
-  </footer>
+  <script>
+    const music = document.getElementById("backgroundMusic");
+    const button = document.getElementById("musicButton");
+
+    music.volume = 0.25;
+
+    button.addEventListener("click", async () => {
+      if (music.paused) {
+        try {
+          await music.play();
+          button.textContent = "♫ Tắt nhạc nền";
+        } catch (error) {
+          button.textContent = "Không phát được nhạc";
+        }
+      } else {
+        music.pause();
+        button.textContent = "♫ Bật nhạc nền";
+      }
+    });
+
+    music.addEventListener("ended", () => {
+      button.textContent = "♫ Bật nhạc nền";
+    });
+  </script>
+
 </body>
 </html>
